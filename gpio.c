@@ -30,7 +30,6 @@ void GPIO_Init(PORT port, char pin, char mode, char type)
     Macro_Set_Bit(RCC->AHB1ENR, port);
 
     // MODER
-    Macro_Write_Block()
     // OTYPER
 
     // ODR

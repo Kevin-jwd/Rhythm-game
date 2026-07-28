@@ -182,7 +182,7 @@ void Main(void)
 
 #endif
 
-#if 1
+#if 0
 
 extern volatile int TIM4_Expired;
 extern volatile int DMA1_STREAM6_DONE;
@@ -232,7 +232,7 @@ void Main(void)
 
             else
             {
-                Macro_Clear_Bit(DMA1_Stream6->CR, 0);	
+                Macro_Clear_Bit(DMA1_Stream6->CR, 0);
                 Macro_Clear_Bit(USART2->CR3, 7);
             }
         }
@@ -242,7 +242,53 @@ void Main(void)
             static unsigned int led = 0;
             LED_Display(led ^= 0x1);
             TIM4_Expired = 0;
-        }        
+        }
+    }
+}
+
+#endif
+
+#if 1
+
+// RGB_LED(WS2812B) 간단 확인용 예제
+// 4번째(마지막) LED만 켜서 빨강 -> 초록 -> 파랑 -> 꺼짐 순서로 반복
+
+#define RGB_TEST_SETTLE_MS      (100U)     // 전원 인가 직후 안정화 대기 시간
+#define RGB_TEST_STEP_MS        (500U)     // 색상 간 대기 시간
+#define RGB_TEST_LED_INDEX      (3U)       // 테스트 대상 LED (0=1번 ~ 3=마지막 4번)
+#define RGB_TEST_FULL           (255U)     // Full 밝기 값
+#define RGB_TEST_NONE           (0U)       // Off 값
+#define BAUD_RATE               (115200U)
+
+static void Delay_ms(unsigned int msec)
+{
+    SysTick_Run(msec);
+    while(!SysTick_Check_Timeout());
+}
+
+void Main(void)
+{
+    Sys_Init(BAUD_RATE);
+    printf("RGB LED(WS2812B) Test\n");
+
+    RGB_LED_Init();
+
+    RGB_LED_Send_All(RGB_TEST_NONE, RGB_TEST_NONE, RGB_TEST_NONE);   // 전원 안정화 대기용 Off
+    Delay_ms(RGB_TEST_SETTLE_MS);
+
+    for(;;)   // 4번째 LED만 켜고 나머지는 Off (전압 강하 영향 분리 확인용)
+    {
+        RGB_LED_Send_One(RGB_TEST_LED_INDEX, RGB_TEST_FULL, RGB_TEST_NONE, RGB_TEST_NONE);   // Red
+        Delay_ms(RGB_TEST_STEP_MS);
+
+        RGB_LED_Send_One(RGB_TEST_LED_INDEX, RGB_TEST_NONE, RGB_TEST_FULL, RGB_TEST_NONE);   // Green
+        Delay_ms(RGB_TEST_STEP_MS);
+
+        RGB_LED_Send_One(RGB_TEST_LED_INDEX, RGB_TEST_NONE, RGB_TEST_NONE, RGB_TEST_FULL);   // Blue
+        Delay_ms(RGB_TEST_STEP_MS);
+
+        RGB_LED_Send_One(RGB_TEST_LED_INDEX, RGB_TEST_NONE, RGB_TEST_NONE, RGB_TEST_NONE);   // Off
+        Delay_ms(RGB_TEST_STEP_MS);
     }
 }
 

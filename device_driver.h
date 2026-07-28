@@ -53,6 +53,16 @@ extern void TIM3_Out_Freq_Generation(unsigned short freq);
 extern void TIM3_Out_Stop(void);
 extern void TIM4_Repeat_Interrupt_Enable(int en, int time);
 
+// Rgb_led.c
+
+extern void RGB_LED_Init(void);
+extern void RGB_LED_Enable(void);
+extern void RGB_LED_Disable(void);
+extern void RGB_LED_Send(unsigned char r, unsigned char g, unsigned char b);
+extern void RGB_LED_Send_All(unsigned char r, unsigned char g, unsigned char b);
+extern void RGB_LED_Send_One(unsigned int index, unsigned char r, unsigned char g, unsigned char b);
+extern void RGB_LED_Reset(void);
+
 // i2c.c
 
 #define SC16IS752_IODIR				0x0A
