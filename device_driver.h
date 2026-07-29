@@ -53,20 +53,29 @@ extern void TIM3_Out_Freq_Generation(unsigned short freq);
 extern void TIM3_Out_Stop(void);
 extern void TIM4_Repeat_Interrupt_Enable(int en, int time);
 
-// Rgb_led.c
+// Rgb_led.c (하드웨어 계층)
 
 extern void RGB_LED_Init(void);
 extern void RGB_LED_Enable(void);
 extern void RGB_LED_Disable(void);
-extern void RGB_LED_Send(unsigned char r, unsigned char g, unsigned char b);
+extern int RGB_LED_Is_Busy(void);
+extern void RGB_LED_Transfer(unsigned int *buf, unsigned int len);
+
+// Ws2812.c (프로토콜 계층)
+
 extern void RGB_LED_Send_All(unsigned char r, unsigned char g, unsigned char b);
 extern void RGB_LED_Send_One(unsigned int index, unsigned char r, unsigned char g, unsigned char b);
-extern void RGB_LED_Reset(void);
+
+// Led8.c
+
+extern void LED8_Init(void);
+extern void LED8_Write(unsigned char pattern);
 
 // i2c.c
 
 #define SC16IS752_IODIR				0x0A
 #define SC16IS752_IOSTATE			0x0B
+#define SC16IS752_IOCONTROL			0x0E
 
 extern void I2C1_SC16IS752_Init(unsigned int freq);
 extern void I2C1_SC16IS752_Write_Reg(unsigned int addr, unsigned int data);

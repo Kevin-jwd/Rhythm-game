@@ -27,6 +27,18 @@ void DMA2_Stream0_IRQHandler(void)
     DMA2_STREAM0_DONE = 1;
 }
 
+volatile int WS2812_DMA_Busy = 0;
+
+void DMA1_Stream1_IRQHandler(void)
+{
+	DMA1->LIFCR = 0x3F << 6;
+	NVIC_ClearPendingIRQ(12);
+
+	Macro_Clear_Bit(DMA1_Stream1->CR, 0);
+	RGB_LED_Disable();
+	WS2812_DMA_Busy = 0;
+}
+
 volatile int DMA1_STREAM6_DONE = 0;
 
 #if 0

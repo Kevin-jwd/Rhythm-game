@@ -3,6 +3,7 @@
 
 // WS2812B 4구 보드 : PA1 -> AF01 (TIM2_CH2), TIMXCLK=96MHz, 1tick=10.4166ns
 // PA2/PA3는 Uart2_Init()에서 Lock 되어 재설정 불가 -> PA1 사용
+// DMA1_Stream1(Channel3, TIM2_UP)이 CCR2에 자동으로 값을 흘려보낸다 (non-blocking)
 
 #define WS2812_GPIO_PIN      (1U)       // PA1
 
@@ -15,7 +16,10 @@
 #define WS2812_RESET_CNT     (45U)      // 56.25us Low (Latch, >=50us)
 
 #define WS2812_BITS_PER_BYTE (8U)
+#define WS2812_BYTES_PER_LED (3U)       // G, R, B
 
 #define WS2812_NUM_LEDS      (4U)
+
+#define WS2812_BUF_LEN       (WS2812_NUM_LEDS * WS2812_BYTES_PER_LED * WS2812_BITS_PER_BYTE + WS2812_RESET_CNT)
 
 #endif /* __RGB_LED_H__ */
