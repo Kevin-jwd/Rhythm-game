@@ -38,9 +38,8 @@ void RGB_LED_Enable(void)
     Macro_Set_Bit(RCC->APB1ENR, 0);                                    // TIM2 Clock
 
     TIM2->CCR2 = 0;
-    Macro_Set_Bit(TIM2->EGR, 0);                                       // Counter 초기화, 레지스터 즉시 반영
+    Macro_Set_Bit(TIM2->EGR, 0);                                       // Counter 초기화
     Macro_Clear_Bit(TIM2->SR, 0);
-    // CEN은 DMA 준비(arm) 후 RGB_LED_Transfer에서 시작
 }
 
 void RGB_LED_Disable(void)
